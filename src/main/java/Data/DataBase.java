@@ -5,14 +5,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.JavascriptExecutor;
+
 import java.time.Duration;
 
 public class DataBase {
@@ -144,6 +143,15 @@ public class DataBase {
   driver.get("https://www.automationexercise.com/");
  }
 
+ @FindBy(xpath = "//p[text()='Your email or password is incorrect!' and @style='color: red;']")
+ WebElement LogingerrorMessage;
+
+ @FindBy(xpath = "//a[@href='/logout' and contains(., 'Logout')]")
+ public WebElement logoutbutton;
+
+
+
+
  public void clickSignupLogin() {
   signupLoginLink.click();
  }
@@ -157,6 +165,13 @@ public class DataBase {
  }
 
  public void UserisloggedVisible(){ loggedUserVisible.isDisplayed(); }
+
+ public void LogingerrorMessageisvisible(){ LogingerrorMessage.isDisplayed();  }
+
+ public void logout(){ logoutbutton.click(); }
+
+ public void signupLoginLink_Visible(){ signupLoginLink.isDisplayed(); }
+
 
  @Step
  @Description("sing up process for new user ")
@@ -246,5 +261,26 @@ public class DataBase {
   deletecontinueButton.click();
 
 
+ }
+ public void handleAlert() {
+  try {
+   // Wait up to 10 seconds for the alert to be present
+   WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+   wait.until(ExpectedConditions.alertIsPresent());
+
+   Alert alert = driver.switchTo().alert();
+   String alertText = alert.getText();
+
+   if (alertText.contains("Change your password")) {
+    alert.accept(); // Accept the alert
+   } else {
+    alert.dismiss(); // Dismiss the alert
+   }
+
+  } catch (NoAlertPresentException e) {
+   System.out.println("No alert present.");
+  } catch (Exception e) {
+   System.out.println("An error occurred while handling the alert: " + e.getMessage());
+  }
  }
 }

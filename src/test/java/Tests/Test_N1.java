@@ -5,6 +5,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import io.qameta.allure.Description;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -67,11 +68,38 @@ public class Test_N1 {
         database.UserisloggedVisible();
         database.DeleteAccount();
 
+    }
+    @Test(priority =  3 )
+    @Description("Login User with incorrect email and password")
+    public void LoginUserwithINcorrectemailandpassword() throws InterruptedException {
+        database.openWebsite();
+        Assert.assertTrue(database.homeLogo.isDisplayed(), "Home logo is not visible");
+        database.clickSignupLogin();
+        Assert.assertTrue(database.isLoginHeaderVisible(), "Login header is not visible");
+        database.fillLoginForm("devidson28@gmail.com","1234512345");
+        database.LogingerrorMessageisvisible();
+    }
+
+    @Test(priority =  4 )
+    @Description("Logout User")
+    public void LogoutUser() throws InterruptedException {
+
+        database.openWebsite();
+        Assert.assertTrue(database.homeLogo.isDisplayed(), "Home logo is not visible");
+        Thread.sleep(2000);
+        database.clickSignupLogin();
+        Assert.assertTrue(database.isLoginHeaderVisible(), "Login header is not visible");
+        database.fillLoginForm("david20@gmail.com", "123123");
+        database.UserisloggedVisible();
+        database.logout();
+        database.signupLoginLink_Visible();
+        database.handleAlert();
+        Thread.sleep(2000);
+
 
 
 
     }
-
     @AfterClass
     public void tearDown() {
 
